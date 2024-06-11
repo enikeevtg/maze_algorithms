@@ -30,5 +30,17 @@
 #     print(max(a, b[i]), '-', min(a, b[i]))
 
 pts = [(0, 0), (0, 1)]
+# pts = [Point(), Point(), Point()]
+pts.insert(0, (3, 3))
+
 for row, col in pts:
   print(row, col)
+
+r, c = pts[0]
+print(pts[0], r, c)
+
+def tmp(pt: tuple):
+  r, c = pt
+  print(r, c)
+  
+tmp(pts[0])

@@ -1,9 +1,21 @@
 # class WaveAlgorithm
+# Добавлена структура Point вместо использования кортежа
 
 NOT_VISITED = -1
 WALL = 1
-ROW = 0
-COL = 1
+# ROW = 0
+# COL = 1
+
+class Point:
+    def __init__(self, row=0, col=0):
+        self.row = row
+        self.col = col
+
+    def __str__(self):
+        return f"""({self.row}, {self.col})"""
+
+    def __repr__(self):
+        return f"""({self.row}, {self.col})"""
 
 
 class WaveAlgorithm:
@@ -22,7 +34,7 @@ class WaveAlgorithm:
         self.right_walls = right_walls
         self.down_walls = down_walls
 
-    def find_path(self, start: tuple, finish: tuple):
+    def find_path(self, start: Point, finish: Point):
         '''
         Функция поиска пути в лабиринте
         Возвращает список координта точек в формает [(row0, col0), ...]:
@@ -43,7 +55,7 @@ class WaveAlgorithm:
 
         self.wave = [start]
         self.wave_step = 0
-        self.length_map[start[ROW]][start[COL]] = 0
+        self.length_map[start.row][start.col] = 0
         has_reached = False 
         while len(self.wave) > 0 and not has_reached:
             self.wave_step += 1
@@ -65,45 +77,45 @@ class WaveAlgorithm:
 
         return path
 
-    def __wave_step(self, finish: tuple) -> bool:
+    def __wave_step(self, finish: Point) -> bool:
         '''
         Функция обработки текущей волны и формирования новой
         Возвращает сигнал достижения точки финиша
         '''
 
         next_wave = []
-        for row, col in self.wave:
+        for pt in self.wave:
             # up direction
-            if row > 0 and self.down_walls[row - 1][col] != WALL\
-               and self.length_map[row - 1][col] == NOT_VISITED:
-                next_wave.append((row - 1, col))
-                self.length_map[row - 1][col] = self.wave_step
+            if pt.row > 0 and self.down_walls[pt.row - 1][pt.col] != WALL\
+               and self.length_map[pt.row - 1][pt.col] == NOT_VISITED:
+                next_wave.append(Point(pt.row - 1, pt.col))
+                self.length_map[pt.row - 1][pt.col] = self.wave_step
 
             # right direction
-            if self.right_walls[row][col] != WALL\
-               and self.length_map[row][col + 1] == NOT_VISITED:
-                next_wave.append((row, col + 1))
-                self.length_map[row][col + 1] = self.wave_step
+            if self.right_walls[pt.row][pt.col] != WALL\
+               and self.length_map[pt.row][pt.col + 1] == NOT_VISITED:
+                next_wave.append(Point(pt.row, pt.col + 1))
+                self.length_map[pt.row][pt.col + 1] = self.wave_step
 
             # down direction
-            if self.down_walls[row][col] != WALL\
-               and self.length_map[row + 1][col] == NOT_VISITED:
-                next_wave.append((row + 1, col))
-                self.length_map[row + 1][col] = self.wave_step
+            if self.down_walls[pt.row][pt.col] != WALL\
+               and self.length_map[pt.row + 1][pt.col] == NOT_VISITED:
+                next_wave.append(Point(pt.row + 1, pt.col))
+                self.length_map[pt.row + 1][pt.col] = self.wave_step
 
             # left direction
-            if col > 0 and self.right_walls[row][col - 1] != WALL\
-               and self.length_map[row][col - 1] == NOT_VISITED:
-                next_wave.append((row, col - 1))
-                self.length_map[row][col - 1] = self.wave_step
+            if pt.col > 0 and self.right_walls[pt.row][pt.col - 1] != WALL\
+               and self.length_map[pt.row][pt.col - 1] == NOT_VISITED:
+                next_wave.append(Point(pt.row, pt.col - 1))
+                self.length_map[pt.row][pt.col - 1] = self.wave_step
             
-            if self.length_map[finish[ROW]][finish[COL]] != NOT_VISITED:
+            if self.length_map[finish.row][finish.col] != NOT_VISITED:
                 return True
 
         self.wave = next_wave
         return False
 
-    def __backtracking(self, finish: tuple) -> list:
+    def __backtracking(self, finish: Point) -> list:
         '''
         Функция сборки пути
         Возвращает список точек от начала до финиша в формате
@@ -111,45 +123,45 @@ class WaveAlgorithm:
         '''
 
         path = [finish]
-        wave_step = self.length_map[finish[ROW]][finish[COL]]
+        wave_step = self.length_map[finish.row][finish.col]
         while wave_step > 0:
             # print(wave_step)
             wave_step -= 1
-            row, col = path[-1]
+            cur_pt = path[-1]
 
             # up direction
-            if row > 0\
-               and self.down_walls[row - 1][col] != WALL\
-               and self.length_map[row - 1][col] ==\
+            if cur_pt.row > 0\
+               and self.down_walls[cur_pt.row - 1][cur_pt.col] != WALL\
+               and self.length_map[cur_pt.row - 1][cur_pt.col] ==\
                    wave_step:
-                path.append((row - 1, col))
+                path.append(Point(cur_pt.row - 1, cur_pt.col))
 
             # right direction
-            elif self.right_walls[row][col] != WALL\
-                 and self.length_map[row][col + 1] ==\
+            elif self.right_walls[cur_pt.row][cur_pt.col] != WALL\
+                 and self.length_map[cur_pt.row][cur_pt.col + 1] ==\
                      wave_step:
-                path.append((row, col + 1))
+                path.append(Point(cur_pt.row, cur_pt.col + 1))
 
             # down direction
-            elif self.down_walls[row][col] != WALL\
-                 and self.length_map[row + 1][col] ==\
+            elif self.down_walls[cur_pt.row][cur_pt.col] != WALL\
+                 and self.length_map[cur_pt.row + 1][cur_pt.col] ==\
                  wave_step:
-                path.append((row + 1, col))
+                path.append(Point(cur_pt.row + 1, cur_pt.col))
 
             # left direction
             else:
-                path.append((row, col - 1))
+                path.append(Point(cur_pt.row, cur_pt.col - 1))
             # print(path)
 
         path.reverse()
         return path
 
-    def __point_validation(self, point: tuple) -> bool:
+    def __point_validation(self, point: Point) -> bool:
         '''
         Функция проверки расположения точки внутри поля лабиринта
         '''
-        row, col = point
-        return 0 <= row < self.rows and 0 <= col < self.cols
+
+        return 0 <= point.row < self.rows and 0 <= point.col < self.cols
 
 
 if __name__ == '__main__':
