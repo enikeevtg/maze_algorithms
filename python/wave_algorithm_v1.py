@@ -1,11 +1,11 @@
-# class maze
+# class WaveAlgorithm
 
 NOT_VISITED = -1
 WALL = 1
 ROW = 0
 COL = 1
 
-class Maze:
+class WaveAlgorithm:
     '''
     Класс поиска пути в лабиринте с помощью волнового алгоритма
     '''
@@ -43,14 +43,14 @@ class Maze:
         self.points_queue = [start]
         self.wave_step = 0
         self.length_map[start[ROW]][start[COL]] = 0
-        has_achieved = False
-        while len(self.points_queue) > 0 and not has_achieved:
+        has_reached = False
+        while len(self.points_queue) > 0 and not has_reached:
             self.wave_step += 1
-            has_achieved = self.__wave_step(finish)
+            has_reached = self.__wave_step(finish)
 
 
         path = []
-        if has_achieved:
+        if has_reached:
             path = self.__backtracking(start, finish)
 
         # lst = [['#' for j in range(self.cols)] for i in range(self.rows)]
@@ -150,21 +150,8 @@ class Maze:
 
         # return point[self.__row_dir] < self.rows
         # and point[self.__col_dir] < self.cols
-        return point[ROW] < self.rows and point[COL] < self.cols
+        return 0 <= point[ROW] < self.rows and 0 <= point[COL] < self.cols
 
 
 if __name__ == '__main__':
     pass
-
-
-
-
-# 0 0 0 1
-# 1 0 1 1
-# 0 1 0 1
-# 0 0 0 1
-
-# 1 0 1 0
-# 0 0 1 0
-# 1 1 0 1
-# 1 1 1 1
