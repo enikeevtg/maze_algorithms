@@ -14,7 +14,7 @@ start = tuple(map(int, input().split()))
 finish = tuple(map(int, input().split()))
 print('start =', start)
 print('finish =', finish)
-print(solution.find_path(start, finish))
+print(solution.get_path(start, finish))
 
 
 # from wave_algorithm import WaveAlgorithm, Point

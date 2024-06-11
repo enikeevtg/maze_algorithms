@@ -20,6 +20,7 @@ research: $(RESEARCH)
 # service
 venv:
 	$(PY) -m $(VENV) $(VENVNAME)
+	@make pull_req
 
 push_req:
 	touch $(REQUIREMENTS)
@@ -29,4 +30,4 @@ pull_req: $(REQUIREMENTS)
 	$(PIP) install -r $(REQUIREMENTS)
 
 style:
-	$(PY) -m pycodestyle *.py
+	$(PY) -m pycodestyle wave_algorithm.py

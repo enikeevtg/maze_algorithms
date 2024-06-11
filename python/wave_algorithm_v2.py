@@ -19,22 +19,18 @@ class Point:
 
 
 class WaveAlgorithm:
-    '''
-    Класс поиска пути в лабиринте с помощью волнового алгоритма
-    '''
+
+    '''Класс поиска пути в лабиринте с помощью волнового алгоритма'''
 
     def __init__(self, width: int, height: int, right_walls: list,
                  down_walls: list) -> list:
-        '''
-        Конструктор класса
-        '''        
-
+        '''Конструктор класса'''
         self.rows = height
         self.cols = width
         self.right_walls = right_walls
         self.down_walls = down_walls
 
-    def find_path(self, start: Point, finish: Point):
+    def get_path(self, start: Point, finish: Point):
         '''
         Функция поиска пути в лабиринте
         Возвращает список координта точек в формает [(row0, col0), ...]:
