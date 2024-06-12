@@ -25,7 +25,7 @@ class WaveAlgorithm:
     def find_path(self, start: tuple, finish: tuple):
         '''
         Функция поиска пути в лабиринте
-        Возвращает список координта точек в формает [(row0, col0), ...]:
+        Возвращает список координта точек в формате [(row0, col0), ...]:
         0. пустой - точки не связаны
         1. единичной длины - точка начала и конца совпадают
         2. длина больше единицы - путь найден
@@ -71,6 +71,7 @@ class WaveAlgorithm:
         Возвращает сигнал достижения точки финиша
         '''
 
+        f_row, f_col = finish
         next_wave = []
         for row, col in self.wave:
             # up direction
@@ -97,7 +98,7 @@ class WaveAlgorithm:
                 next_wave.append((row, col - 1))
                 self.length_map[row][col - 1] = self.wave_step
             
-            if self.length_map[finish[ROW]][finish[COL]] != NOT_VISITED:
+            if self.length_map[f_row][f_col] != NOT_VISITED:
                 return True
 
         self.wave = next_wave
@@ -111,7 +112,8 @@ class WaveAlgorithm:
         '''
 
         path = [finish]
-        wave_step = self.length_map[finish[ROW]][finish[COL]]
+        row, col = finish
+        wave_step = self.length_map[row][col]
         while wave_step > 0:
             # print(wave_step)
             wave_step -= 1
