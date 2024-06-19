@@ -22,7 +22,7 @@ class WaveAlgorithm:
 
     '''Класс поиска пути в лабиринте с помощью волнового алгоритма'''
 
-    def __init__(self, width: int, height: int, right_walls: list,
+    def __init__(self, height: int, width: int, right_walls: list,
                  down_walls: list) -> list:
         '''Конструктор класса'''
         self.rows = height

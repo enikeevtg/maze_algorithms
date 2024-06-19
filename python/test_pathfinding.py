@@ -1,6 +1,6 @@
 from wave_algorithm import WaveAlgorithm
 
-width, height = map(int, input().split())
+height, width = map(int, input().split())
 right_walls = []
 down_walls = []
 for i in range(height):
@@ -8,7 +8,7 @@ for i in range(height):
 for i in range(height):
     down_walls.append(list(map(int, input().split())))
 
-solution = WaveAlgorithm(width, height, right_walls, down_walls)
+solution = WaveAlgorithm(height, width, right_walls, down_walls)
 
 start = tuple(map(int, input().split()))
 finish = tuple(map(int, input().split()))
@@ -17,9 +17,11 @@ print('finish =', finish)
 print(solution.get_path(start, finish))
 
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# for wave algorithm with class Point (not tuple)
 # from wave_algorithm import WaveAlgorithm, Point
 
-# width, height = map(int, input().split())
+# height, width = map(int, input().split())
 # right_walls = []
 # down_walls = []
 # for i in range(height):
@@ -27,7 +29,7 @@ print(solution.get_path(start, finish))
 # for i in range(height):
 #     down_walls.append(list(map(int, input().split())))
 
-# solution = WaveAlgorithm(width, height, right_walls, down_walls)
+# solution = WaveAlgorithm(height, width, right_walls, down_walls)
 
 # row, col = tuple(map(int, input().split()))
 # start = Point(row, col)

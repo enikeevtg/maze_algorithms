@@ -10,11 +10,10 @@ class WaveAlgorithm:
 
     '''Maze pathfinding class using the wave algorithm'''
 
-    def __init__(self, width: int, height: int, right_walls: list,
-                 down_walls: list) -> list:
+    def __init__(self, h: int, w: int, right_walls: list, down_walls: list):
         '''WaveAlgorithm class constructor'''
-        self.rows = height
-        self.cols = width
+        self.rows = h
+        self.cols = w
         self.right_walls = right_walls
         self.down_walls = down_walls
 
