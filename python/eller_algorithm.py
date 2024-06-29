@@ -1,8 +1,13 @@
 # class EllerAlgorithm
-from random import randint, choice
+# в окончательной версии:
+#  - удалить методы распечатки лабиринта
+#  - в методе __init__ убрать выброс исключения, если из фронта
+#    точно придёт валидный запрос на генерацию лабиринта?
 
-PASS = 0
-WALL = 1
+from random import choice
+import maze_constants as c
+
+
 EMPTY_SET = 0
 
 
@@ -10,17 +15,9 @@ class EllerAlgorithm:
 
     '''Maze generation Eller's algorithm'''
 
-    def __init__(self, h: int, w: int) -> None:
+    def __init__(self) -> None:
         '''EllerAlgorithm class constructor'''
-        if h < 1 or w < 1:
-            raise ValueError('Maze must has non-zero dimensions')
-
-        self.rows = h
-        self.cols = w
-        self.right_walls = [[PASS if i < w - 1 else WALL for i in range(w)]
-                            for _ in range(h)]
-        self.down_walls = [[PASS for _ in range(w)] if i < h - 1 else
-                           [WALL for _ in range(w)] for i in range(h)]
+        pass
 
     @staticmethod
     def maze_representation(rows, cols, right_walls, down_walls):
@@ -31,8 +28,8 @@ class EllerAlgorithm:
         for i in range(rows):
             print('|', end='')
             for j in range(cols):
-                print(('_' if down_walls[i][j] == WALL else ' '), end='')
-                print(('|' if right_walls[i][j] == WALL else ' '), end='')
+                print(('_' if down_walls[i][j] == c.WALL else ' '), end='')
+                print(('|' if right_walls[i][j] == c.WALL else ' '), end='')
             print()
 
     def print_maze(self):
@@ -40,12 +37,18 @@ class EllerAlgorithm:
         self.maze_representation(self.rows, self.cols, self.right_walls,
                                  self.down_walls)
 
-    def generate_maze(self) -> tuple:
+    def generate_maze(self, rows, cols) -> tuple:
         '''Perfect maze generation by Eller's algorithm method
 
         Return tuple of two matrices. Each matrix contains data about walls:
         right (vertical) walls and down (horizontal) walls
         '''
+        if rows < 1 or cols < 1:
+            raise ValueError('Maze must has positive value dimensions')
+
+        self.rows = rows
+        self.cols = cols
+        self.right_walls, self.down_walls = self.__init_walls_matrices()
         # if user request maze one of dimenseions of which equals 1
         if self.rows == 1 or self.cols == 1:
             return (self.right_walls, self.down_walls)
@@ -64,6 +67,15 @@ class EllerAlgorithm:
 
         return (self.right_walls, self.down_walls)
 
+    def __init_walls_matrices(self):
+        right_walls = [[c.PASS if i < self.cols - 1 else c.WALL
+                        for i in range(self.cols)] for _ in range(self.rows)]
+        down_walls = [[c.PASS for _ in range(self.cols)]
+                      if i < self.rows - 1 else
+                      [c.WALL for _ in range(self.cols)]
+                      for i in range(self.rows)]
+        return right_walls, down_walls
+
     def __empty_cells_filling(self, line) -> list:
         '''Empty cells in current line filling by unique number'''
         for i in range(self.cols):
@@ -76,11 +88,11 @@ class EllerAlgorithm:
         '''Right walls in the row generating method'''
         for col in range(self.cols - 1):
             if line[col] == line[col + 1]:
-                self.right_walls[row][col] = WALL
+                self.right_walls[row][col] = c.WALL
             else:
-                self.right_walls[row][col] = choice([PASS, WALL])
+                self.right_walls[row][col] = choice([c.PASS, c.WALL])
 
-            if self.right_walls[row][col] == PASS and \
+            if self.right_walls[row][col] == c.PASS and \
                line[col] != line[col + 1]:
                 line = self.__cells_union(line[col + 1], line[col], line)
 
@@ -101,8 +113,8 @@ class EllerAlgorithm:
         for col in range(self.cols):
             set_ = line[col]
             sets_info[set_] = sets_info.get(set_, {'pass': False, 'walls': []})
-            self.down_walls[row][col] = choice([PASS, WALL])
-            if self.down_walls[row][col] == PASS:
+            self.down_walls[row][col] = choice([c.PASS, c.WALL])
+            if self.down_walls[row][col] == c.PASS:
                 sets_info[set_]['pass'] = True
             else:
                 sets_info[set_]['walls'].append(col)
@@ -110,7 +122,7 @@ class EllerAlgorithm:
         for set_, info_ in sets_info.items():
             if info_['pass'] is False:
                 col = choice(info_['walls'])
-                self.down_walls[row][col] = PASS
+                self.down_walls[row][col] = c.PASS
 
     def __cells_cleaning(self, row, line) -> list:
         '''Cells with walls under it cleaning method'''
@@ -124,12 +136,12 @@ class EllerAlgorithm:
         row = self.rows - 1
         for col in range(self.cols - 1):
             if line[col] != line[col + 1]:
-                self.right_walls[row][col] = PASS
+                self.right_walls[row][col] = c.PASS
                 line = list(map((lambda x: line[col] if x == line[col + 1]
                                  else x), line))
             else:
-                self.right_walls[row][col] = WALL
+                self.right_walls[row][col] = c.WALL
 
 
 if __name__ == "__main__":
-    pass
+    print(EllerAlgorithm.__doc__)

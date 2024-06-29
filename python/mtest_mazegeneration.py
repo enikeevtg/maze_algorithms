@@ -10,11 +10,9 @@ def print_matrix(matrix) -> None:
     print()
 
 
-height, width = map(int, input().split())
-new_maze = eller_algorithm.EllerAlgorithm(height, width)
-right_walls = []
-down_walls = []
-right_walls, down_walls = new_maze.generate_maze()
+rows, cols = map(int, input().split())
+new_maze = eller_algorithm.EllerAlgorithm()
+right_walls, down_walls = new_maze.generate_maze(rows, cols)
 # print_matrix(right_walls)
 # print_matrix(down_walls)
 new_maze.print_maze()
