@@ -15,10 +15,6 @@ class EllerAlgorithm:
 
     '''Maze generation Eller's algorithm'''
 
-    def __init__(self) -> None:
-        '''EllerAlgorithm class constructor'''
-        pass
-
     @staticmethod
     def maze_representation(rows, cols, right_walls, down_walls):
         '''Maze representation static method'''
@@ -43,12 +39,10 @@ class EllerAlgorithm:
         Return tuple of two matrices. Each matrix contains data about walls:
         right (vertical) walls and down (horizontal) walls
         '''
-        if rows < 1 or cols < 1:
-            raise ValueError('Maze must has positive value dimensions')
-
+        self.__initial_data_validation(rows, cols)
         self.rows = rows
         self.cols = cols
-        self.right_walls, self.down_walls = self.__init_walls_matrices()
+        self.right_walls, self.down_walls = self.__walls_matrices_init()
         # if user request maze one of dimenseions of which equals 1
         if self.rows == 1 or self.cols == 1:
             return (self.right_walls, self.down_walls)
@@ -67,7 +61,11 @@ class EllerAlgorithm:
 
         return (self.right_walls, self.down_walls)
 
-    def __init_walls_matrices(self):
+    def __initial_data_validation(self, rows, cols):
+        if rows < 1 or cols < 1:
+            raise ValueError('Maze must has positive value dimensions')
+
+    def __walls_matrices_init(self):
         right_walls = [[c.PASS if i < self.cols - 1 else c.WALL
                         for i in range(self.cols)] for _ in range(self.rows)]
         down_walls = [[c.PASS for _ in range(self.cols)]

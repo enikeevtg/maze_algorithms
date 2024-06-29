@@ -146,13 +146,13 @@ def test_eller_exceptions_2(rows, cols):
 
 # wave algorithm tests
 def get_wave_algorithm_expected_output(line):
-  line = re.split(r'''[ ,\[\(\)\]\n]''', line.strip('output: '))
-  line = list(filter(lambda x: len(x) > 0, line))
-  line = list(map(int, line))
-  output = []
-  for i in range(0, len(line) - 1, 2):
-    output.append((line[i], line[i + 1]))
-  return output
+    line = re.split(r'''[ ,\[\(\)\]\n]''', line.strip('output: '))
+    line = list(filter(lambda x: len(x) > 0, line))
+    line = list(map(int, line))
+    output = []
+    for i in range(0, len(line) - 1, 2):
+        output.append((line[i], line[i + 1]))
+    return output
 
 
 def get_wave_tc(lines):

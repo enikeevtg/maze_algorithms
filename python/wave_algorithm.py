@@ -1,7 +1,4 @@
 # class WaveAlgorithm
-# в окончательной версии:
-#  - в методе get_path убрать убрать выброс исключения, если из фронта
-#    точно придёт валидный запрос
 
 
 import maze_constants as c
@@ -14,6 +11,7 @@ class WaveAlgorithm:
     def __init__(self, rows: int, cols: int,
                  right_walls: list, down_walls: list):
         '''WaveAlgorithm class constructor'''
+        self.__initial_data_validation(rows, cols, right_walls, down_walls)
         self.rows = rows
         self.cols = cols
         self.right_walls = right_walls
@@ -27,7 +25,7 @@ class WaveAlgorithm:
         One elemnt list if (start == finish)
         '''
         if self.__point_validation(start) is False:
-            raise ValueError('Start point is outside the maze')
+            raise ValueError('Starting point is outside the maze')
         if self.__point_validation(finish) is False:
             raise ValueError('Finish point is outside the maze')
         if start == finish:
@@ -45,6 +43,24 @@ class WaveAlgorithm:
                 break
 
         return self.__backtracking(finish)
+
+    def __initial_data_validation(self, rows, cols, right_walls, down_walls):
+        '''Initial data (rows, cols, walls) checking function'''
+        if rows < 1 or cols < 1:
+            raise ValueError('Maze must has positive value dimensions')
+        if self.__walls_array_validation(right_walls, rows, cols) is False:
+            raise ValueError(f'Vertical walls array has incorrect dimesions')
+        if self.__walls_array_validation(down_walls, rows, cols) is False:
+            raise ValueError(f'Horizontal walls array has incorrect dimesions')
+
+    def __walls_array_validation(self, matrix, rows, cols):
+        '''Walls array dimensions checking function'''
+        if len(matrix) != rows:
+            return False
+        for row in matrix:
+            if len(row) != cols:
+                return False        
+        return True
 
     def __wave_step(self, finish: tuple) -> bool:
         '''
