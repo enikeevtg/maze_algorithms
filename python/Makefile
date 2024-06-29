@@ -1,37 +1,68 @@
 .PHONY: venv
 
-#
-PY = python3
-PIP = pip3
-VENV = venv
 
-# filenames
-TEST_PATH = test_pathfinding.py
-TEST_MAZEGEN = test_mazegeneration.py
-RESEARCH = research.py
+# UTILITIES
+VENV = venv
+PIP = pip3
+PY = python3
+PYTEST = py.test
+
+
+# FILENAMES
 VENVNAME = venv
 REQUIREMENTS = requirements.txt
+RESEARCH = research.py
 
-test_path: $(TEST_PATH)
-	$(PY) $(TEST_PATH) < test_path.txt
+ELLER = eller_algorithm.py
+WAVE = wave_algorithm.py
 
-test_mazegen: $(TEST_MAZEGEN)
-	$(PY) $(TEST_MAZEGEN) < test_gen.txt
+MTEST_PATH = mtest_pathfinding.py
+MTEST_GEN = mtest_mazegeneration.py
+
+CHECK = check_maze.py
+TESTS = tests.py
+
+MAIN_FILES = $(ELLER) $(WAVE) $(CHECK) $(TESTS)
+
+
+# TARGETS
+tests: $(TESTS)
+	$(PYTEST) -s -v $(TESTS)
+
+check_tests: $(TESTS)
+	$(PYTEST) -s -v -m "check_maze" $(TESTS)
+
+gen_tests: $(TESTS)
+	$(PYTEST) -s -v -m "eller" $(TESTS)
+
+path_tests: $(TESTS)
+	$(PYTEST) -s -v -m "wave" $(TESTS)
 
 research: $(RESEARCH)
-	$(PY) $(RESEARCH)
+	@$(PY) $(RESEARCH)
 
-# service
+mtest_path: $(MTEST_PATH)
+	@$(PY) $(MTEST_PATH) < mtest_path.txt
+
+mtest_gen: $(MTEST_GEN)
+	@$(PY) $(MTEST_GEN) < mtest_gen.txt
+
+
+# SERVICE
 venv:
 	$(PY) -m $(VENV) $(VENVNAME)
 	@make pull_req
 
-push_req:
+freeze_requirements:
 	touch $(REQUIREMENTS)
 	$(PIP) freeze > $(REQUIREMENTS)
 
-pull_req: $(REQUIREMENTS)
+install_requirements: $(REQUIREMENTS)
 	$(PIP) install -r $(REQUIREMENTS)
 
-style:
-	$(PY) -m pycodestyle wave_algorithm.py eller_algorithm.py
+style: $(MAIN_FILES)
+	@for file in $(MAIN_FILES) ; do \
+		echo "style checking $$file" ; \
+		$(PY) -m pycodestyle $$file ; \
+	done
+

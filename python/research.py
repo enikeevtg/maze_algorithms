@@ -86,3 +86,81 @@ import random
 #   sets_info[key]['walls'].append(col)
 # for k, v in sets_info.items():
 #   print(f'''{k}: {v}''')
+
+# dct = {(0, 1): (0, 0), (1, 1): (0, 1), (1, 0): (1, 1)}
+# for child, parent in dct.items():
+#     print(parent, '->', child)
+
+
+# tests_directory = "test_cases/"
+
+def get_walls_matrix(lines, rows, cols):
+    walls_matrix = [[] for _ in range(rows)]
+    for i in range(rows):
+        line = next(lines)
+        walls_matrix[i] = list(map(int, line.split()))
+        if len(walls_matrix[i]) != cols:
+           raise ValueError("elements out of matrix range")
+    return walls_matrix
+
+# def get_tc(lines):
+#     name = next(lines).rstrip()
+#     rows, cols = tuple(map(int, next(lines).split()))
+#     next(lines)  # right walls:
+#     r_w = get_walls_matrix(lines, rows, cols)
+#     next(lines)  # down walls
+#     d_w = get_walls_matrix(lines, rows, cols)
+#     check = {"True": True, "False": False}[next(lines).split(': ')[1]]
+#     for _ in range(rows + 1):
+#         next(lines)
+#     return {"test_name": name, "rows": rows, "cols": cols,
+#             "right_walls": r_w, "down_walls": d_w, "expected_result": check}
+
+# test_cases = []
+# with open(tests_directory + "check_maze_tests.txt", "r") as file:
+#   # for line in fp.readlines():
+#   #   row, col = line.split()
+#   #   print(row, col)
+#   lines = (line.rstrip() for line in file)
+#   while True:
+#     try:
+#       test_cases.append(get_tc(lines))
+#       next(lines)
+#     except StopIteration:
+#       break
+
+# for tc in test_cases:
+#     for k, v in tc.items():
+#        print(k, ': ', v, sep='')
+#     print()
+
+# print("the end!")
+
+import re
+tests_directory = "test_cases/"
+
+def get_path_from_file(line):
+  line = re.split(r'''[ \,\[\(\)\]\n]''', line.strip('path = '))
+  line = list(filter(lambda x: len(x) > 0, line))
+  line = list(map(int, line))
+  path = []
+  for i in range(0, len(line) - 1, 2):
+    path.append((line[i], line[i + 1]))
+  return path
+
+def get_tc(lines):
+    name = next(lines).rstrip()
+    rows, cols = tuple(map(int, next(lines).split()))
+    next(lines)  # right walls:
+    r_w = get_walls_matrix(lines, rows, cols)
+    next(lines)  # down walls
+    d_w = get_walls_matrix(lines, rows, cols)
+   
+
+with open(tests_directory + "wave_algorithm_tests.txt", "r") as file:
+  lines = (line for line in file)
+  r_w, d_w = get_walls_matrix()
+  path = get_path_from_file(next(lines))
+  print(path)
+
+print([0, 1, 2] == [0, 1, 2])
