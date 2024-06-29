@@ -94,14 +94,14 @@ import random
 
 # tests_directory = "test_cases/"
 
-def get_walls_matrix(lines, rows, cols):
-    walls_matrix = [[] for _ in range(rows)]
-    for i in range(rows):
-        line = next(lines)
-        walls_matrix[i] = list(map(int, line.split()))
-        if len(walls_matrix[i]) != cols:
-           raise ValueError("elements out of matrix range")
-    return walls_matrix
+# def get_walls_matrix(lines, rows, cols):
+#     walls_matrix = [[] for _ in range(rows)]
+#     for i in range(rows):
+#         line = next(lines)
+#         walls_matrix[i] = list(map(int, line.split()))
+#         if len(walls_matrix[i]) != cols:
+#            raise ValueError("elements out of matrix range")
+#     return walls_matrix
 
 # def get_tc(lines):
 #     name = next(lines).rstrip()
@@ -136,31 +136,35 @@ def get_walls_matrix(lines, rows, cols):
 
 # print("the end!")
 
-import re
-tests_directory = "test_cases/"
+# import re
+# tests_directory = "test_cases/"
 
-def get_path_from_file(line):
-  line = re.split(r'''[ \,\[\(\)\]\n]''', line.strip('path = '))
-  line = list(filter(lambda x: len(x) > 0, line))
-  line = list(map(int, line))
-  path = []
-  for i in range(0, len(line) - 1, 2):
-    path.append((line[i], line[i + 1]))
-  return path
+# def get_path_from_file(line):
+#   line = re.split(r'''[ \,\[\(\)\]\n]''', line.strip('path = '))
+#   line = list(filter(lambda x: len(x) > 0, line))
+#   line = list(map(int, line))
+#   path = []
+#   for i in range(0, len(line) - 1, 2):
+#     path.append((line[i], line[i + 1]))
+#   return path
 
-def get_tc(lines):
-    name = next(lines).rstrip()
-    rows, cols = tuple(map(int, next(lines).split()))
-    next(lines)  # right walls:
-    r_w = get_walls_matrix(lines, rows, cols)
-    next(lines)  # down walls
-    d_w = get_walls_matrix(lines, rows, cols)
+# def get_tc(lines):
+#     name = next(lines).rstrip()
+#     rows, cols = tuple(map(int, next(lines).split()))
+#     next(lines)  # right walls:
+#     r_w = get_walls_matrix(lines, rows, cols)
+#     next(lines)  # down walls
+#     d_w = get_walls_matrix(lines, rows, cols)
    
 
-with open(tests_directory + "wave_algorithm_tests.txt", "r") as file:
-  lines = (line for line in file)
-  r_w, d_w = get_walls_matrix()
-  path = get_path_from_file(next(lines))
-  print(path)
+# with open(tests_directory + "wave_algorithm_tests.txt", "r") as file:
+#   lines = (line for line in file)
+#   path = get_path_from_file(next(lines))
+#   print(path)
 
 print([0, 1, 2] == [0, 1, 2])
+
+a = (0, 1)
+b = (2, 3)
+a = (a[0] + b[0], a[1] + b[1])
+print(a)

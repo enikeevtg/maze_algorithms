@@ -32,10 +32,10 @@ tests: $(TESTS)
 check_tests: $(TESTS)
 	$(PYTEST) -s -v -m "check_maze" $(TESTS)
 
-gen_tests: $(TESTS)
+eller_tests: $(TESTS)
 	$(PYTEST) -s -v -m "eller" $(TESTS)
 
-path_tests: $(TESTS)
+wave_tests: $(TESTS)
 	$(PYTEST) -s -v -m "wave" $(TESTS)
 
 research: $(RESEARCH)

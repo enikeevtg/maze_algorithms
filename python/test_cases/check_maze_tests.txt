@@ -9,7 +9,7 @@ down walls:
 0 0
 0 1
 1 1
-expected output: perfect
+output: perfect
  _ _
 |   |
 | |_|
@@ -29,7 +29,7 @@ down walls:
 0 0 0 1 1
 0 0 1 1 0
 1 1 1 1 1
-expected output: perfect
+output: perfect
  _ _ _ _ _
 | | | |   |
 | |_ _ _| |
@@ -47,7 +47,7 @@ down walls:
 0 0
 0 0
 1 1
-expected output: loops
+output: loops
  _ _
 |   |
 | | |
@@ -67,7 +67,7 @@ down walls:
 0 0 0 1 1
 0 0 1 1 0
 1 1 1 1 1
-expected output: loops
+output: loops
  _ _ _ _ _
 | | | |   |
 | |_ _ _| |
@@ -85,7 +85,7 @@ down walls:
 0 0
 0 1
 1 1
-expected output: isolations
+output: isolations
  _ _
 | | |
 | |_|
@@ -105,7 +105,7 @@ down walls:
 0 0 0 1 1
 0 0 1 1 0
 1 1 1 1 1
-expected output: isolations
+output: isolations
  _ _ _ _ _
 | | | | | |
 | |_ _ _| |

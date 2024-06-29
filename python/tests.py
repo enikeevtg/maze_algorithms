@@ -32,12 +32,12 @@ def get_check_maze_tc(lines):
     r_w = get_walls_matrix(lines, rows, cols)
     next(lines)  # down walls:
     d_w = get_walls_matrix(lines, rows, cols)
-    check = next(lines).split(': ')[1]
-    # maze visual representation
+    output = next(lines).split(': ')[1]
+    # maze visual representation:
     for _ in range(rows + 1):
         next(lines)
     return {"tc_name": name, "rows": rows, "cols": cols,
-            "right_walls": r_w, "down_walls": d_w, "expected_output": check}
+            "right_walls": r_w, "down_walls": d_w, "expected_output": output}
 
 
 def get_check_maze_tcs():
@@ -101,8 +101,6 @@ def test_eller(param_eller_tcs):
     maze = EllerAlgorithm()
     rows, cols = param_eller_tcs
     r_walls, d_walls = maze.generate_maze(rows, cols)
-    # print()
-    # maze.print_maze()
     assert check_maze(rows, cols, r_walls, d_walls) == c.PERFECT
 
 
@@ -147,14 +145,14 @@ def test_eller_exceptions_2(rows, cols):
 
 
 # wave algorithm tests
-def get_path_from_line(line):
-  line = re.split(r'''[ ,\[\(\)\]\n]''', line.strip('path = '))
+def get_wave_algorithm_expected_output(line):
+  line = re.split(r'''[ ,\[\(\)\]\n]''', line.strip('output: '))
   line = list(filter(lambda x: len(x) > 0, line))
   line = list(map(int, line))
-  path = []
+  output = []
   for i in range(0, len(line) - 1, 2):
-    path.append((line[i], line[i + 1]))
-  return path
+    output.append((line[i], line[i + 1]))
+  return output
 
 
 def get_wave_tc(lines):
@@ -170,16 +168,13 @@ def get_wave_tc(lines):
     start = tuple(map(int, next(lines).split()))
     next(lines)  # finish:
     finish = tuple(map(int, next(lines).split()))
-    path = get_path_from_line(next(lines))
-    # maze visual representation
+    output = get_wave_algorithm_expected_output(next(lines))
+    # maze visual representation:
     for _ in range(rows + 1):
         next(lines)
-    # print({"tc_name": name, "rows": rows, "cols": cols,
-    #         "right_walls": r_w, "down_walls": d_w,
-    #         "start": start, "finish": finish, "expected_output": path})
     return {"tc_name": name, "rows": rows, "cols": cols,
             "right_walls": r_w, "down_walls": d_w,
-            "start": start, "finish": finish, "expected_output": path}
+            "start": start, "finish": finish, "expected_output": output}
 
 
 def get_wave_tcs():
@@ -217,3 +212,136 @@ def test_wave(param_wave_tcs):
     finish = tc["finish"]
     path = solve.get_path(start, finish)
     assert path == tc["expected_output"]
+
+
+@pytest.fixture(scope="module", params=get_wave_tcs(), ids=idfn_wave_tc)
+def param_wave_exceptions_tcs(request):
+    return request.param
+
+
+@pytest.mark.wave
+def test_wave_exceptions_start_row_pos(param_wave_exceptions_tcs):
+    tc = param_wave_exceptions_tcs
+    rows = tc["rows"]
+    cols = tc["cols"]
+    right_walls = tc["right_walls"]
+    down_walls = tc["down_walls"]
+    solve = WaveAlgorithm(rows, cols, right_walls, down_walls)
+
+    start = tc["start"]
+    start = (start[0] + rows, start[1])
+    finish = tc["finish"]
+    with pytest.raises(ValueError):
+        solve.get_path(start, finish)
+
+
+@pytest.mark.wave
+def test_wave_exceptions_start_row_neg(param_wave_exceptions_tcs):
+    tc = param_wave_exceptions_tcs
+    rows = tc["rows"]
+    cols = tc["cols"]
+    right_walls = tc["right_walls"]
+    down_walls = tc["down_walls"]
+    solve = WaveAlgorithm(rows, cols, right_walls, down_walls)
+
+    start = tc["start"]
+    start = (start[0] - rows, start[1])
+    finish = tc["finish"]
+    with pytest.raises(ValueError):
+        solve.get_path(start, finish)
+
+
+@pytest.mark.wave
+def test_wave_exceptions_start_col_pos(param_wave_exceptions_tcs):
+    tc = param_wave_exceptions_tcs
+    rows = tc["rows"]
+    cols = tc["cols"]
+    right_walls = tc["right_walls"]
+    down_walls = tc["down_walls"]
+    solve = WaveAlgorithm(rows, cols, right_walls, down_walls)
+
+    start = tc["start"]
+    start = (start[0], start[1] + cols)
+    finish = tc["finish"]
+    with pytest.raises(ValueError):
+        solve.get_path(start, finish)
+
+
+@pytest.mark.wave
+def test_wave_exceptions_start_col_neg(param_wave_exceptions_tcs):
+    tc = param_wave_exceptions_tcs
+    rows = tc["rows"]
+    cols = tc["cols"]
+    right_walls = tc["right_walls"]
+    down_walls = tc["down_walls"]
+    solve = WaveAlgorithm(rows, cols, right_walls, down_walls)
+
+    start = tc["start"]
+    start = (start[0], start[1] - cols)
+    finish = tc["finish"]
+    with pytest.raises(ValueError):
+        solve.get_path(start, finish)
+
+
+@pytest.mark.wave
+def test_wave_exceptions_finish_row_pos(param_wave_exceptions_tcs):
+    tc = param_wave_exceptions_tcs
+    rows = tc["rows"]
+    cols = tc["cols"]
+    right_walls = tc["right_walls"]
+    down_walls = tc["down_walls"]
+    solve = WaveAlgorithm(rows, cols, right_walls, down_walls)
+
+    start = tc["start"]
+    finish = tc["finish"]
+    finish = (finish[0] + rows, finish[1])
+    with pytest.raises(ValueError):
+        solve.get_path(start, finish)
+
+
+@pytest.mark.wave
+def test_wave_exceptions_finish_row_neg(param_wave_exceptions_tcs):
+    tc = param_wave_exceptions_tcs
+    rows = tc["rows"]
+    cols = tc["cols"]
+    right_walls = tc["right_walls"]
+    down_walls = tc["down_walls"]
+    solve = WaveAlgorithm(rows, cols, right_walls, down_walls)
+
+    start = tc["start"]
+    finish = tc["finish"]
+    finish = (finish[0] - rows, finish[1])
+    with pytest.raises(ValueError):
+        solve.get_path(start, finish)
+
+
+@pytest.mark.wave
+def test_wave_exceptions_finish_col_pos(param_wave_exceptions_tcs):
+    tc = param_wave_exceptions_tcs
+    rows = tc["rows"]
+    cols = tc["cols"]
+    right_walls = tc["right_walls"]
+    down_walls = tc["down_walls"]
+    solve = WaveAlgorithm(rows, cols, right_walls, down_walls)
+
+    start = tc["start"]
+    finish = tc["finish"]
+    finish = (finish[0], finish[1] + cols)
+    with pytest.raises(ValueError):
+        solve.get_path(start, finish)
+
+
+@pytest.mark.wave
+def test_wave_exceptions_finish_col_neg(param_wave_exceptions_tcs):
+    tc = param_wave_exceptions_tcs
+    rows = tc["rows"]
+    cols = tc["cols"]
+    right_walls = tc["right_walls"]
+    down_walls = tc["down_walls"]
+    solve = WaveAlgorithm(rows, cols, right_walls, down_walls)
+
+    start = tc["start"]
+    finish = tc["finish"]
+    finish = (finish[0], finish[1] - cols)
+    with pytest.raises(ValueError):
+        solve.get_path(start, finish)
